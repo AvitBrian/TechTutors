@@ -1,6 +1,6 @@
-.navbar {
-  color: red;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+body {
+  background-color: red;
+}
+* {
+  box-sizing: border-box;
 }
