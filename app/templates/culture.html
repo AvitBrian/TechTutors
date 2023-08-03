@@ -1,10 +1,8 @@
-
-        {% extends "base.html" %}
-        {% block content %}
-        <ul>
-            {%for each in data:%}
-                <li>{{each.content}}</li>
-            {%endfor%}
-        </ul>
-    {% endblock %}
-        
+{% extends "base.html" %}
+{% block content %}
+<ul>
+    {%for each in data:%}
+    <li>{{each.content}}</li>
+    {%endfor%}
+</ul>
+{% endblock %}
