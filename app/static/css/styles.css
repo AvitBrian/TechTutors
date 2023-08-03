@@ -1,5 +1,6 @@
 body {
   background-color: red;
+  padding-top: 50px;
 }
 * {
   box-sizing: border-box;
