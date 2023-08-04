@@ -12,6 +12,15 @@ Through a mobile-first approach, TechTutors ensures that users can access the pl
 
 ## contents:
 TechTutors will house a wide range of content categories, including technology, gaming, social media, education, and more, tailored to cater to users' interests and needs. The platform's simplicity and user-friendly interface will accommodate varying levels of digital literacy, ensuring a seamless experience for all users.
+we're using flask for the backend:
+[![Flask](https://www.fullstackpython.com/img/logos/flask.jpg)](https://flask.palletsprojects.com/)
+<br>
+
+Html, css and Javascript
+![29488525-f55a69d0-84da-11e7-8a39-5476f663b5eb](https://github.com/AvitBrian/TechTutors/assets/113444617/da281e52-9f63-43aa-b3c9-f2377fb1f097)
+
+
+
 
 # Manual:
 the backend is composed of a flask app that interracts with our database to provide api endpoints. 
