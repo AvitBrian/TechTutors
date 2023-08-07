@@ -1,7 +1,33 @@
 body {
-  background-color: red;
   padding-top: 50px;
+  scroll-behavior: smooth;
+  overflow-y: hidden;
 }
 * {
   box-sizing: border-box;
+}
+/* Custom CSS */
+.content-container {
+  width: 70%;
+  /* Default width for mobile */
+  margin: 0 auto;
+  /* Center the container horizontally */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Center the container vertically */
+  box-sizing: border-box;
+}
+.content-container .centered {
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+@media (min-width: 768px) {
+  /* Medium and Large screens */
+  .content-container {
+    width: 50%;
+  }
 }
