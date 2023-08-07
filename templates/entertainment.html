@@ -1,31 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <link rel="stylesheet" href="/static/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    {% block head %} {% endblock %}
+    <title></title>
 </head>
 
-<<<<<<< HEAD
-<body>
-    <h1>TechTutors</h1>
-    {% block content %}
-    <div class="card">
-	    <h2>Access Database Information</h2>
-	    <p>Here is some important information</p>
-	    <button class="info-button" onclick="showInformation()">Access Information</button>
-	    </div>
-    <script>
-	    function getinfo() {
-		    alert("Here's the information.");
-	    }
-    </script>
-    {% endblock %}
-=======
 <body class="pt-5">
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary  fixed-top">
@@ -38,13 +23,7 @@
                 <div class="collapse navbar-collapse " id="navbarTogglerDemo01">
                     <a class="navbar-brand" href="home">TechTutors</a>
                     <ul class="navbar-nav m-auto mb-2 mb-lg-0">
-                        {%for each in categories: %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{each|lower}}">
-                                {{each}}
-                            </a>
-                        </li>
-                        {%endfor%}
+                        
 
                     </ul>
                     <form class="d-flex" role="search">
@@ -56,8 +35,9 @@
         </nav>
     </header>
 
-    {% block content %} {% endblock %}
->>>>>>> 55fb50219fe6d1fb6dee4bdb40d00032769bd239
+    
+
+
 
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

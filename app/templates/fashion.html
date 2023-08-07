@@ -1,21 +1,42 @@
 {% extends "base.html" %}
+{% block head %}
+<title>Fashion Today</title>
+<style>
+	.image-gallery {
+		display: flex;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		flex-grow: 1;
+		/* Allow the container to grow and fill the available space */
+	}
+
+	.image-gallery img {
+		flex: 0 0 auto;
+		max-width: 100vh;
+		height: auto;
+		scroll-snap-align: start;
+		padding: 5rem;
+
+	}
+
+	body {
+		overflow: hidden;
+	}
+</style>
+{% endblock %}
+
+<header>FASHION TODAY</header>
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="EN">
-	<head>
-		<meta charset="utf-8">
-		<header>FASHION TODAY</HEADER>
-		</HEAD>
-		<BODY>
-<h1>FASHION</h1>
-<p>Hiiii! Fashion stuff here :</p>
-<li>
-	<img src="https://media.glamour.com/photos/5fb873c621e98357424f5309/master/w_960,c_limit/Screen%20Shot%202020-11-20%20at%208.55.59%20PM.png">
-	<img src="https://media.glamour.com/photos/5fbabcf721e98357424f5324/master/w_960,c_limit/Screen%20Shot%202020-11-22%20at%202.32.42%20PM.png">
-	<img src="https://media.glamour.com/photos/5fbac11926ca2199210e9d83/1:1/w_960,c_limit/Screen%20Shot%202020-11-22%20at%202.50.08%20PM.png">
-	<img src="https://cdn.cliqueinc.com/posts/292437/best-baggy-jeans-292437-1617148961985-main.600x0c.jpg?interlace=true&quality=70">
-</li>
-</body>
-</hmtl>
-{%endblock%}
+
+<div class="image-gallery">
+	<img
+		src="https://media.glamour.com/photos/5fb873c621e98357424f5309/master/w_960,c_limit/Screen%20Shot%202020-11-20%20at%208.55.59%20PM.png">
+	<img
+		src="https://media.glamour.com/photos/5fbabcf721e98357424f5324/master/w_960,c_limit/Screen%20Shot%202020-11-22%20at%202.32.42%20PM.png">
+	<img
+		src="https://media.glamour.com/photos/5fbac11926ca2199210e9d83/1:1/w_960,c_limit/Screen%20Shot%202020-11-22%20at%202.50.08%20PM.png">
+	<img
+		src="https://cdn.cliqueinc.com/posts/292437/best-baggy-jeans-292437-1617148961985-main.600x0c.jpg?interlace=true&quality=70">
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+
+        {% extends "base.html" %}
+        {% block content %}
+        <ul>
+            {{data}}
+            {%for each in data:%}
+            {%for key, value in each.items():%}
+            {%if not key=="id":%}
+                <ul>
+                    <li>{{key}}: {{value}}</li>
+                </ul>
+            {%endif%}
+            {%endfor%}
+            {%endfor%}
+        </ul>
+    {% endblock %}
+        
