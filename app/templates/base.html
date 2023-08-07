@@ -10,7 +10,18 @@
 
 <body>
     <h1>TechTutors</h1>
-    {% block content %} {% endblock %}
+    {% block content %}
+    <div class="card">
+	    <h2>Access Database Information</h2>
+	    <p>Here is some important information</p>
+	    <button class="info-button" onclick="showInformation()">Access Information</button>
+	    </div>
+    <script>
+	    function getinfo() {
+		    alert("Here's the information.");
+	    }
+    </script>
+    {% endblock %}
 
 </body>
 
