@@ -58,3 +58,6 @@ sudo docker run --name techtutors -p 5000:5000 python-techtutors .
 ```
 you can add the `-d` flag to run it in detached mode
 and everything should be running in the blink of an eye! navigate to the address and have fun.
+
+p.s: just go to our servers IP for official updates on the website. <b>
+link: [Techtutors.com](http://54.221.93.28:5000/)
