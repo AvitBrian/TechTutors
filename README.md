@@ -5,6 +5,7 @@
 - [Manual](#manual)
 - [Docker](#docker)
 
+
 For official updates on the website: 
 [Techtutors.com](http://54.221.93.28:5000/)
 <br> disclaimer: this is not the latest version. switch to the dev branch for a more recent overview.
@@ -61,5 +62,4 @@ sudo docker run --name techtutors -p 5000:5000 python-techtutors .
 ```
 you can add the `-d` flag to run it in detached mode
 and everything should be running in the blink of an eye! navigate to the address and have fun.
-
 
