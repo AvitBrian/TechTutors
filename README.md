@@ -5,7 +5,7 @@
 - [Manual](#manual)
 - [Docker](#docker)
 
-p.s: just go to our servers IP for official updates on the website. <br>
+For official updates on the website: 
 [Techtutors.com](http://54.221.93.28:5000/)
 <br> disclaimer: this is not the latest version. switch to the dev branch for a more recent overview.
 
