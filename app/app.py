@@ -2,6 +2,7 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_migrate import Migrate
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -9,6 +10,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Init app
 app = Flask(__name__, template_folder="templates")
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config.from_pyfile('config.py')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config['DB_USER']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}/{app.config['DB_NAME']}"
 
 # test
 print("this is where the template folder is: ", app.template_folder)
@@ -22,6 +25,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Init db
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # Init ma
 ma = Marshmallow(app)
