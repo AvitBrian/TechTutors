@@ -80,6 +80,7 @@
                 // Get the current URL path without the leading slash
                 var currentPath = window.location.pathname.substring(1);
                 var container = $("#wrapper-container");
+                var body = $("body");
 
                 // Find the corresponding navigation item and add the "active" class
                 $('.navbar-nav .nav-link').each(function () {
@@ -91,7 +92,9 @@
                     }
                     if (currentPath !== "home") {
                         container.show();
+                        body.addClass('blur');
                     } else {
+
                         const btn = $("#btn")
                         const url = "http://54.221.93.28:5000/api/bitcontents";
 
