@@ -51,7 +51,30 @@
             <button id="btn">Refresh!</button>
         </div>
         <script>
+            const container = document.getElementById("content");
+            const btn = document.getElementById("btn");
+            const url = "http://54.221.93.28:5000/api/bitcontents";
 
+            let getRandomContent = (bitcontents) => {
+                const randomIndex = Math.floor(Math.random() * bitcontents.length);
+                return bitcontents[randomIndex].content;
+            };
+
+
+            let getBitContent = () => {
+                container.classList.remove("fadein");
+                container.classList.add("fadeout");
+                fetch(url)
+                    .then(data => data.json())
+                    .then(items => {
+                        const randomBitContent = getRandomContent(items);
+                        container.textContent = randomBitContent;
+                        container.classList.remove("fadeout");
+                        container.classList.add("fadein");
+
+                    });
+            }
+            btn.addEventListener("click", getBitContent);
 
 
 
@@ -75,13 +98,10 @@
             integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
             crossorigin="anonymous"></script>
         <script>
+
             $(document).ready(function () {
                 // Get the current URL path without the leading slash
                 var currentPath = window.location.pathname.substring(1);
-                var container = $('#content');
-                var wrapper = $('#wrapper-container');
-                const btn = $('#btn');
-                const url = "http://localhost:5000/api/bitcontents";
 
                 // Find the corresponding navigation item and add the "active" class
                 $('.navbar-nav .nav-link').each(function () {
@@ -92,32 +112,11 @@
                         $(this).removeClass('active');
                     }
                     if (currentPath !== "home") {
-                        wrapper.show();
-                    } else {
-                        let getRandomContent = (bitcontents) => {
-                            const randomIndex = Math.floor(Math.random() * bitcontents.length);
-                            return bitcontents[randomIndex].content;
-                        };
-
-                        let getBitContent = () => {
-                            container.removeClass("fadein");
-                            container.addClass("fadeout");
-                            fetch(url)
-                                .then(data => data.json())
-                                .then(items => {
-                                    const randomBitContent = getRandomContent(items);
-                                    container.textContent = randomBitContent;
-                                    container.classList.remove("fadeout");
-                                    container.classList.add("fadein");
-                                });
-                        }
-
-                        // Attach the click event handler
-                        btn.on('click', getBitContent);
+                        var container = $("#wrapper-container");
+                        container.show();
                     }
                 });
             });
-
         </script>
     </body>
 
