@@ -11,17 +11,19 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__, template_folder="templates")
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config.from_pyfile('config.py')
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config['DB_USER']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}/{app.config['DB_NAME']}"
 
+print(app.config['DB_USER'])
 # test
 print("this is where the template folder is: ", app.template_folder)
 print("this is where the base directory is: ", basedir)
 
 
 # Database
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + \
-    os.path.join(basedir, "db.sqlite")
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + \
+#     os.path.join(basedir, "db.sqlite")
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config['DB_USER']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}/{app.config['DB_NAME']}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 # Init db
 db = SQLAlchemy(app)
