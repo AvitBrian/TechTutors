@@ -47,26 +47,39 @@
         </header>
         <div class="wrapper">
             <span>&#x1F4A1;</span>
-            <p id="content"></p>
-            <button id="btn">Get Random Joke</button>
+            <p id="content" class="">ready?</p>
+            <button id="btn">Refresh!</button>
         </div>
         <script>
-            const jokeContainer = document.getElementById("content");
+            const container = document.getElementById("content");
             const btn = document.getElementById("btn");
-            const url = "http://54.221.93.28:5000/api/bitcontents";
+            const url = "http://localhost:5000/api/bitcontents";
 
-            let getJoke = () => {
-                jokeContainer.classList.remove("fade");
+            let getRandomContent = (bitcontents) => {
+                const randomIndex = Math.floor(Math.random() * bitcontents.length);
+                return bitcontents[randomIndex].content;
+            };
+
+
+            let getBitContent = () => {
+                container.classList.remove("fadein");
+                container.classList.add("fadeout");
                 fetch(url)
                     .then(data => data.json())
-                    .then(item => {
-                        jokeContainer.textContent = `${item.joke}`;
-                        jokeContainer.classList.add("fade");
+                    .then(items => {
+                        const randomBitContent = getRandomContent(items);
+                        container.textContent = randomBitContent;
+                        container.classList.remove("fadeout");
+                        container.classList.add("fadein");
+
                     });
             }
-            btn.addEventListener("click", getJoke);
-            getJoke();
+            btn.addEventListener("click", getBitContent);
+
+
+
         </script>
+
 
 
 

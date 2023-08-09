@@ -7,6 +7,7 @@ from sqlalchemy.sql import text
 from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_cors import CORS
 import secrets
 import os
 
@@ -15,6 +16,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Init app
 app = Flask(__name__, template_folder="templates")
+CORS(app)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config.from_pyfile('config.py')
 
@@ -188,10 +190,23 @@ def get_bitcontents():
 @app.route("/api/bitcontent/<category_name>", methods=["GET"])
 def get_bitcontent(category_name):
     if category_name:
-        print("yo00000!!!!!!!! bitcontent: ")
+
         bitcontent = Bitcontent.query.filter_by(
             category_name=category_name).all()
-        print("yo00000!!!!!!!! bitcontent: ", bitcontent)
+        response = bitcontents_schema.dump(bitcontent)
+        result = jsonify(response)
+        data = result.get_json()
+        return data
+    else:
+        return "No content for the category", 404
+
+
+@app.route("/api/bitcontent/<category_name>/<id>", methods=["GET"])
+def get_bitcontent_id(category_name, id):
+    if category_name:
+
+        bitcontent = Bitcontent.query.filter_by(
+            category_name=category_name, id=id).all()
         response = bitcontents_schema.dump(bitcontent)
         result = jsonify(response)
         data = result.get_json()
