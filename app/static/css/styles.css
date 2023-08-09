@@ -8,6 +8,7 @@ body {
   background-color: #fab22e;
 }
 .wrapper {
+  display: none;
   width: 80vmin;
   padding: 50px 40px;
   margin: 0 auto;
