@@ -2,8 +2,14 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from sqlalchemy import exc
+from sqlalchemy.sql import text
 from flask_migrate import Migrate
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+import secrets
 import os
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,16 +18,24 @@ app = Flask(__name__, template_folder="templates")
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config.from_pyfile('config.py')
 
-print(app.config['DB_USER'])
+# Set secret_key
+app.secret_key = secrets.token_hex(16)
+
+# set optional bootswatch theme
+app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+
+admin = Admin(app, name='techtutors', template_mode='bootstrap3')
+
+# Add administrative views here
 # test
-print("this is where the template folder is: ", app.template_folder)
-print("this is where the base directory is: ", basedir)
+# print("this is where the template folder is: ", app.template_folder)
+# print("this is where the base directory is: ", basedir)
 
 
 # Database
 # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + \
 #     os.path.join(basedir, "db.sqlite")
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config['DB_USER']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}:{app.config['DB_PORT']}/{app.config['DB_NAME']}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config['DB_USER']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}/{app.config['DB_NAME']}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
@@ -29,8 +43,17 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+
 # Init ma
 ma = Marshmallow(app)
+
+# test connectionnn
+with app.app_context():
+    try:
+        db.session.execute(text("SELECT 1"))
+        print("Database connection successful")
+    except exc.SQLAlchemyError as e:
+        print("Database connection failed:", str(e))
 
 # bitcontent Class/Model
 
@@ -50,11 +73,17 @@ class Bitcontent(db.Model):
 
 
 class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
+    id = db.Column(db.Integer, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False, primary_key=True)
 
     def __repr__(self):
         return "<Category %r>" % self.name
+
+
+# Create the database tables
+with app.app_context():
+    db.create_all()
+
 
 # bitcontent Schema
 
@@ -68,7 +97,34 @@ class CategorySchema(ma.Schema):
     class Meta:
         fields = ("id", "name")
 
+# Create admin views for Bitcontent and Category
 
+
+class BitcontentModelView(ModelView):
+    # Specify the columns to display
+    column_list = ["id", "category", "content"]
+    # Specify the columns in the edit form
+    form_columns = ("category", "content")
+
+    def __init__(self, session, **kwargs):
+        super(BitcontentModelView, self).__init__(
+            Bitcontent, session, **kwargs)
+        self.form_args = {
+            "category": {
+                "query_factory": lambda: db.session.query(Category.name),
+                "get_label": "name"
+            }
+        }
+
+
+class CategoryModelView(ModelView):
+    column_list = ["id", "name"]
+    form_columns = ("id", "name")
+
+
+# Add the BitcontentModelView to the admin interface
+admin.add_view(BitcontentModelView(db.session))
+admin.add_view(CategoryModelView(Category, db.session))
 # Init schema
 bitcontent_schema = BitcontentSchema()
 bitcontents_schema = BitcontentSchema(many=True)
