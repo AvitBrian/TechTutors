@@ -45,7 +45,7 @@
                 </div>
             </nav>
         </header>
-        <div class="wrapper">
+        <div class="wrapper" id="wrapper-container">
             <span>&#x1F4A1;</span>
             <p id="content" class="">ready?</p>
             <button id="btn">Refresh!</button>
@@ -110,6 +110,10 @@
                         $(this).addClass('active');
                     } else {
                         $(this).removeClass('active');
+                    }
+                    if (currentPath === "home") {
+                        var container = $("#wrapper-container");
+                        container.hide();
                     }
                 });
             });
