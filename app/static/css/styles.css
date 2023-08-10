@@ -33,7 +33,25 @@ p {
   font-weight: 400;
   text-align: center;
   word-wrap: break-word;
-  line-height: 35px;
+  line-height: 30@keyframes rotateAnimation {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(180deg);
+    }
+}
+
+.hover-effect {
+    animation: rotateAnimation 1s linear infinite;
+    transform-origin: center;
+}
+
+.hover-effect:hover {
+    animation: none;
+    transform: rotate(180deg);
+}
+px;
   margin: 30px 0;
   opacity: 1;
 }
@@ -44,6 +62,37 @@ p {
 .fadein {
   opacity: 1;
   transition: opacity 1.5s;
+}
+.nav-link {
+  color: #333;
+}
+
+.active-link {
+  color: #fab22e;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.active-link::before {
+  content: "👉"; /* Hand emoji pointing right */
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+.navbar-nav .nav-link {
+  text-decoration: none; /* Remove underlines */
+  color: #000; /* Change text color */
+}
+
+@media (max-width: 767px) {
+  .active-link::before {
+    content: ""; /* Hide the hand emoji on smaller screens */
+    margin-right: 0; /* Remove margin */
+    font-size: inherit; /* Use the default font size */
+  }
+}
+.btn-yellow-outline {
+  color: #ffd705;
+  text-shadow: -1px -0.5px 0 black, 1px -0.5px 0 black, -1px 0.5px 0 black,
+    1px 0.5px 0 black;
 }
 
 button {
@@ -70,4 +119,83 @@ button {
     255,
     0.5
   ); /* Adjust the background color and opacity */
+}
+.hidden{
+  display: none;
+}
+@media (max-width: 767px) {
+  /* Adjust the collapsed navbar font size, padding, margins, etc. */
+  .navbar-toggler-icon {
+    font-size: 1.5rem; /* Example font size adjustment */
+    /* Add more styles as needed */
+  }
+
+  /* Adjust the navbar items */
+  .navbar-nav {
+    text-align: center; /* Center align the items */
+    /* Add more styles as needed */
+  }
+
+  /* Adjust the search form */
+  .navbar form {
+    margin-top: 10px; /* Example margin adjustment */
+    /* Add more styles as needed */
+  }
+}
+
+@keyframes hoverAnimation {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(-5px);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+}
+
+.hovers {
+    animation: hoverAnimation 2s infinite ease-in-out;
+}
+
+
+.toast-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1000;
+}
+
+.toast {
+    position: relative;
+    min-width: 300px;
+}
+
+.glowing {
+    animation: glowingAnimation 2s infinite alternate; /* Adjust the animation duration as needed */
+}
+
+@keyframes glowingAnimation {
+    from {/
+        opacity: 0.3; 
+        box-shadow: 0 0 5px #ffd705; 
+    }
+    to {
+        opacity: .5;
+        box-shadow: 0 0 15px#ffd705; 
+    }
+}
+.glowing-text {
+    animation: glowingText 1s infinite alternate; 
+}
+
+@keyframes glowingText {
+    to{
+        color: #ffd705; 
+        text-shadow: 0 0 10px #ffd705; 
+    }
+    to{
+
+        /* color: #ffd705; 
+        text-shadow: 0 0 10px black;   */
+    }
+
 }

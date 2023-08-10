@@ -2,59 +2,71 @@
 {% block head %}
 <title>Education Resources</title>
 <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+
+    }
+
     body {
-        font-family: Arial, sans-serif;
+        font-family: Poppins, sans-serif;
         background-color: skyblue;
         margin: 0;
         padding: 0;
     }
 
-    header {
-        text-align: right;
-        padding: 10px;
-        background-color: #ffffff;
-        /* White background for the header */
-    }
-
-    .logo img {
-        width: 100px;
-        height: auto;
-    }
-
     .content {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
-        padding: 20px;
+        justify-content: center;
+        padding-top: 30px;
+        text-align: center;
+    }
+
+    img {
+        margin: 0;
     }
 
     .content img {
-        width: 400px;
+        width: 100%;
+        max-width: 400px;
         height: auto;
-        margin-right: 20px;
+        margin-bottom: 20px;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50vh;
+        margin: 0
     }
 
     h1 {
-        font-size: 36px;
+        font-size: 24px;
         font-weight: bold;
     }
 
     p {
-        font-size: 18px;
+        font-size: 16px;
+        margin-bottom: 20px;
     }
 </style>
 {% endblock %}
 
-{%block content%}
+{% block content %}
 
 <div class="content">
     <img src="https://as2.ftcdn.net/v2/jpg/04/99/58/25/1000_F_499582584_icIMtQH39iMh5mbqNwvrRFgxcWURf45u.jpg"
         alt="Education Image">
-    <div>
+    <div class="info container-fluid">
         <h1><b>EDUCATION RESOURCES</b></h1>
-        <p>"TechTutors" aims to address the challenges<br> of digital illiteracy and limited access to information<br>by
-            providing a user-friendly platform accessible through smartphones and USSD applications</p>
-        <p style="text-align: right;">READ MORE</p>
+        <p>"TechTutors" aims to address the challenges of digital illiteracy and limited access to
+            informationby providing a user-friendly platform accessible through smartphones and USSD
+            applications</p>
+        <a href="https://github.com/AvitBrian/TechTutors">CURIOUS? HERE'S MORE</a>
     </div>
 </div>
-{%endblock%}
+{% endblock %}

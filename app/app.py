@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from flask import Flask, render_template, redirect, url_for, request, jsonify
+from flask import Flask, render_template, redirect, url_for, request, jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from sqlalchemy import exc
@@ -74,6 +74,14 @@ class Bitcontent(db.Model):
         self.content = content
 
 
+class Requests(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(50), unique=True, nullable=False)
+
+    def __init__(self, category_name):
+        self.category_name = category_name
+
+
 class Category(db.Model):
     id = db.Column(db.Integer, autoincrement=True)
     name = db.Column(db.String(50), nullable=False, primary_key=True)
@@ -98,6 +106,11 @@ class BitcontentSchema(ma.Schema):
 class CategorySchema(ma.Schema):
     class Meta:
         fields = ("id", "name")
+
+
+class RequestsSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "category_name")
 
 # Create admin views for Bitcontent and Category
 
@@ -124,17 +137,27 @@ class CategoryModelView(ModelView):
     form_columns = ("id", "name")
 
 
+class RequestsModelView(ModelView):
+    def __init__(self, session, **kwargs):
+        super(RequestsModelView, self).__init__(
+            Requests, session, **kwargs)
+
+
 # Add the BitcontentModelView to the admin interface
 admin.add_view(BitcontentModelView(db.session))
+admin.add_view(RequestsModelView(db.session))
 admin.add_view(CategoryModelView(Category, db.session))
 # Init schema
 bitcontent_schema = BitcontentSchema()
 bitcontents_schema = BitcontentSchema(many=True)
 category_schema = CategorySchema()
 categories_schema = CategorySchema(many=True)
+requests_schema = RequestsSchema()
 
 # Create a category
 categories = []
+
+# CREATE A CATEGORY
 
 
 @app.route("/api/addcategory", methods=["POST"])
@@ -147,6 +170,23 @@ def add_category():
     db.session.commit()
 
     return category_schema.jsonify(new_category)
+
+
+@app.route("/api/addrequests", methods=["POST"])
+def add_requests():
+    referring_url = request.referrer
+    category_name = request.form["category_name"]
+    existing_request = Requests.query.filter_by(category_name=category_name).first()
+    if existing_request:
+        flash("Request already exists!", "danger")
+    else:
+        new_request = Requests(category_name=category_name)
+        db.session.add(new_request)
+        db.session.commit()
+        flash("Request submitted successfully!", "success")
+    
+    return redirect(referring_url)
+
 
 # Create a bitcontent
 
@@ -238,28 +278,30 @@ def display_category(category_name):
     category_data = get_categories(category_name.lower())
     bitcontent = get_bitcontent(category_name)
     template_name = category_name + ".html"
-    template_dir = basedir + '/'+app.template_folder
+    template_dir = basedir + '/' + app.template_folder
     if os.path.exists(template_dir + "/" + template_name):
         if category_data:
-            print("HERE YOU GOOOO:", template_dir)
-            return render_template(template_name, categories=categories_list, data=bitcontent)
+            return render_template(template_name, categories=categories_list, data=bitcontent, category=category_name)
         else:
             return "Category not found", 404
     else:
-        html_template_content = """
-        {% extends "base.html" %}
-        {% block content %}
-        <ul>
-            {%for each in data:%}
-                <li>{{each.content}}</li>
-            {%endfor%}
-        </ul>
-    {% endblock %}
-        """
+        if category_data and category_name in categories_list:  # Check if category_name is in categories_list
+            html_template_content = """
+            {% extends "base.html" %}
+            {% block content %}
+            <ul>
+                {% for each in data %}
+                    <li>{{ each.content }}</li>
+                {% endfor %}
+            </ul>
+            {% endblock %}
+            """
 
-        with open(template_dir + "/" + template_name, "w") as f:
-            f.write(html_template_content)
-        return render_template(template_name, categories=categories_list, data=bitcontent)
+            with open(template_dir + "/" + template_name, "w") as f:
+                f.write(html_template_content)
+            return render_template(template_name, categories=categories_list, data=bitcontent, category=category_name)
+        else:
+            return render_template("notfound.html")
 
 
 @app.route("/aboutus")
