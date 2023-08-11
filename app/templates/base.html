@@ -8,6 +8,9 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
 
 
     {% block head %} {% endblock %}
@@ -42,14 +45,15 @@
                         {{category|upper}}
                         {%else%}
 
-                        <i class="fas fa-chevron-down fa-1x hovers"
+                        <i class="fas fa-chevron-down fa-1x"
                             style="color:black; text-decoration: none; text-shadow: none; margin:0; padding: 5px;"></i>
                         {%endif%}
                     </span>
                 </button>
 
                 <div class="collapse navbar-collapse " id="collapse">
-                    <a class="navbar-brand d-md-block d-none" href="home"><img src="logo.png" /></a>
+                    <a class="d-md-block d-none" href="home"><img class="logo-main"
+                            src="{{ url_for('static', filename='images/logo.png') }}" /></a>
                     <ul class="navbar-nav m-auto mb-2 mb-lg-0">
                         <a class="nav-link d-md-none d-bg-none" href="home">Home</a>
                         {%for each in categories: %}
@@ -65,7 +69,7 @@
                     <form class="d-flex" role="search" action="{{ url_for('add_requests') }}" method="post">
                         <input class="form-control me-2" type="search" name="category_name" placeholder="Category"
                             aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Request</button>
+                        <button class="btn btn-secondary" type="submit">Request</button>
                     </form>
 
                 </div>
@@ -73,9 +77,15 @@
         </nav>
     </header>
     <div class="hovers wrapper " id="wrapper-container">
-        <span class="glowing-text">&#x1F4A1;</span>
+        <div>
+            <span class="glowing-text">&#x1F4A1;</span>
+        </div>
+        <div class="image-container"><img class="logo" src="{{ url_for('static', filename='images/logo2.png') }}" />
+        </div>
         <p id="content" class="">...</p>
+
         <button id="btn">How fah?</button>
+
     </div>
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -86,18 +96,16 @@
         const currentCategory = document.getElementById("current-category").textContent;
         const btn = document.getElementById("btn");
         const url = "http://54.221.93.28:5000/api/bitcontent/" + currentCategory.trim();
-        console.log(url)
+        const imageContainer = document.querySelector('image-gallery');
+        const wrapper = document.getElementById('wrapper');
 
-        let getRandomContent = (bitcontents) => {
-            if (bitcontents && bitcontents.length > 0) {
-                const randomIndex = Math.floor(Math.random() * bitcontents.length);
-                return bitcontents[randomIndex].content;
-            } else {
-                return "No content available.";
-            }
-        };
+        imageContainer.addEventListener('touchstart', () => {
+            wrapper.classList.add('hidden');
+        });
 
-
+        imageContainer.addEventListener('touchend', () => {
+            wrapper.classList.remove('hidden');
+        });
 
         let getBitContent = () => {
             container.classList.remove("fadein");

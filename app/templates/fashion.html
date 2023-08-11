@@ -1,28 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
 <title>Fashion Today</title>
-<style>
-	.image-gallery {
-		display: flex;
-		overflow-x: auto;
-		scroll-snap-type: x mandatory;
-		flex-grow: 1;
-		/* Allow the container to grow and fill the available space */
-	}
 
-	.image-gallery img {
-		flex: 0 0 auto;
-		max-width: 100vh;
-		height: auto;
-		scroll-snap-align: start;
-		padding: 5rem;
-
-	}
-
-	body {
-		overflow: hidden;
-	}
-</style>
 {% endblock %}
 
 <header>FASHION TODAY</header>
