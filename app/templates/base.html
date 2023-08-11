@@ -96,16 +96,16 @@
         const currentCategory = document.getElementById("current-category").textContent;
         const btn = document.getElementById("btn");
         const url = "http://54.221.93.28:5000/api/bitcontent/" + currentCategory.trim();
-        const imageContainer = document.querySelector('image-gallery');
-        const wrapper = document.getElementById('wrapper');
 
-        imageContainer.addEventListener('touchstart', () => {
-            wrapper.classList.add('hidden');
-        });
 
-        imageContainer.addEventListener('touchend', () => {
-            wrapper.classList.remove('hidden');
-        });
+        let getRandomContent = (bitcontents) => {
+            if (bitcontents.length > 0) {
+                const randomIndex = Math.floor(Math.random() * bitcontents.length);
+                return bitcontents[randomIndex].content;
+            } else {
+                return "No content available yet 😫"; // Default message when bitcontents is empty
+            }
+        };
 
         let getBitContent = () => {
             container.classList.remove("fadein");
@@ -126,7 +126,7 @@
             var toast = document.getElementById("toast");
             var bsToast = new bootstrap.Toast(toast);
             bsToast.hide();
-        }, 5000); // 5000
+        }, 3000);
 
 
 
@@ -141,14 +141,11 @@
     <script>
 
         $(document).ready(function () {
-            // Get the current URL path without the leading slash
             var currentPath = window.location.pathname.substring(1);
             $('.navbar-toggler').on('click', function () {
-                $(this).blur(); // Remove focus from the button
+                $(this).blur();
             });
 
-
-            // Find the corresponding navigation item and add the "active" class
             $('.navbar-nav .nav-link').each(function () {
                 var linkPath = $(this).attr('href');
                 if (linkPath === currentPath) {
