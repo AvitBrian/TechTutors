@@ -3,11 +3,23 @@
 
 </style>{% endblock %}
 {% block content %}
-<div class="content-container">
-    {%for each in data:%}
-    <div class="centered  bg-warning-subtle">
-        <p class="">{{each.content}}</p>
+<div class="image-gallery" id="gallery">
+
+    <div><img src="https://wallpapercave.com/dwp1x/wp9611544.jpg" ></div>
+    <div><img src="https://wallpapercave.com/dwp1x/wp8991843.jpg" >
     </div>
-    {%endfor%}
+
 </div>
 {% endblock %}
+<script>
+    const imageContainer = document.getElementById('gallery');
+    const wrapper = document.getElementById('wrapper-container');
+
+    imageContainer.addEventListener('touchstart', () => {
+        wrapper.classList.add('hidden');
+    });
+
+    imageContainer.addEventListener('touchend', () => {
+        wrapper.classList.remove('hidden');
+    });
+</script>

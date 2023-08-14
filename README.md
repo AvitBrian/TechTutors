@@ -6,6 +6,10 @@
 - [Docker](#docker)
 
 
+For official updates on the website: 
+[Techtutors.com](http://54.221.93.28:5000/)
+<br> disclaimer: this is not the latest version. switch to the dev branch for a more recent overview.
+
 # 📓 Abstract:
 TechTutors is a web-based platform designed to address digital illiteracy and provide inclusive access to relevant information in Africa. By leveraging the power of technology, the platform aims to bridge the information gap and empower individuals through easy-to-access, bite-sized content. The project targets those with limited digital skills or resources, offering them an opportunity to stay informed, connected, and enriched.
 Through a mobile-first approach, TechTutors ensures that users can access the platform via their smartphones, making valuable information available at their fingertips. Moreover, the inclusion of a USSD application widens the platform's reach to those without smartphones, promoting inclusivity across diverse user demographics.
@@ -58,3 +62,4 @@ sudo docker run --name techtutors -p 5000:5000 python-techtutors .
 ```
 you can add the `-d` flag to run it in detached mode
 and everything should be running in the blink of an eye! navigate to the address and have fun.
+
