@@ -3,13 +3,21 @@ import mysql.connector
 
 app = Flask(__name__)
 
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config.from_pyfile('config.py')
+
 # Database connection
 db = mysql.connector.connect(
-    host="localhost",
-    user="yourusername",
-    password="yourpassword",
-    database="techtutors"
+    host=app.config['DB_HOST'],
+    user=app.config['DB_USER'],
+    password=app.config['DB_PASSWORD'],
+    database=app.config['DB_NAME']
 )
+if db.is_connected():
+    print("database connection established successfully")
+
+print(db.name)
+
 
 @app.route('/ussd', methods=['POST'])
 def ussd_handler():
@@ -36,6 +44,7 @@ def ussd_handler():
         response = handle_user_input(user_input)
 
     return response
+
 
 def handle_user_input(user_input):
     """
@@ -65,6 +74,7 @@ def handle_user_input(user_input):
     else:
         return 'END Invalid input. Please try again.'
 
+
 def get_random_content(category):
     """
     Retrieves random content from the specified category.
@@ -86,6 +96,7 @@ def get_random_content(category):
     else:
         return 'END No content available for this category.\n'
 
+
 def save_new_category_recursive(category):
     """
     Adds a new category to the database.
@@ -105,6 +116,7 @@ def save_new_category_recursive(category):
         return 'END Category added successfully!\n'
     except Exception as e:
         return f'END Error adding category: {str(e)}\n'
+
 
 if __name__ == '__main__':
     app.run(debug=True)
