@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 arg1 "
+    exit 1
+fi
+arg=$1
+
+git add .
+git commit -m "$arg"
+git push

@@ -7,7 +7,11 @@ from sqlalchemy.sql import text
 from flask_migrate import Migrate
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_admin.menu import MenuLink
 from flask_cors import CORS
+from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
 import secrets
 import os
 
@@ -19,9 +23,23 @@ app = Flask(__name__, template_folder="templates")
 CORS(app)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config.from_pyfile('config.py')
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
 
 # Set secret_key
 app.secret_key = secrets.token_hex(16)
+
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 # set optional bootswatch theme
 app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
@@ -56,6 +74,14 @@ with app.app_context():
         print("Database connection successful")
     except exc.SQLAlchemyError as e:
         print("Database connection failed:", str(e))
+
+# User Class/model
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(512), nullable=False)
 
 # bitcontent Class/Model
 
@@ -112,6 +138,7 @@ class RequestsSchema(ma.Schema):
     class Meta:
         fields = ("id", "category_name")
 
+
 # Create admin views for Bitcontent and Category
 
 
@@ -131,10 +158,16 @@ class BitcontentModelView(ModelView):
             }
         }
 
+    def is_accessible(self):
+        return current_user.is_authenticated
+
 
 class CategoryModelView(ModelView):
     column_list = ["id", "name"]
     form_columns = ("id", "name")
+
+    def is_accessible(self):
+        return current_user.is_authenticated
 
 
 class RequestsModelView(ModelView):
@@ -142,11 +175,38 @@ class RequestsModelView(ModelView):
         super(RequestsModelView, self).__init__(
             Requests, session, **kwargs)
 
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class UserModelView(ModelView):
+    column_list = ["id", "username"]
+    # Only show username and password fields in the form
+    form_columns = ["username", "password"]
+    can_delete = False
+
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class LogoutMenuLink(MenuLink):
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+
+class LoginMenuLink(MenuLink):
+    def is_accessible(self):
+        return not current_user.is_authenticated
 
 # Add the BitcontentModelView to the admin interface
+
+
+admin.add_view(UserModelView(User, db.session))
 admin.add_view(BitcontentModelView(db.session))
 admin.add_view(RequestsModelView(db.session))
 admin.add_view(CategoryModelView(Category, db.session))
+admin.add_link(LogoutMenuLink(name='SIGN OUT', url='/logout'))
+admin.add_link(LoginMenuLink(name='SIGN IN', url='/login'))
 # Init schema
 bitcontent_schema = BitcontentSchema()
 bitcontents_schema = BitcontentSchema(many=True)
@@ -157,7 +217,48 @@ requests_schema = RequestsSchema()
 # Create a category
 categories = []
 
-# CREATE A CATEGORY
+
+# login
+@app.route('/admin')
+def admin():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))  # Redirect to login page
+
+    # Your admin logic here
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password, password):
+            login_user(user)
+            return redirect(url_for('admin.index'))  # Redirect to admin
+    return render_template('login.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))
+
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+#         hashed_password = generate_password_hash(password, method='scrypt')
+#         new_user = User(username=username, password=hashed_password)
+#         db.session.add(new_user)
+#         db.session.commit()
+#         return redirect(url_for('login'))
+#     return render_template('register.html')
+# # CREATE A CATEGORY
 
 
 @app.route("/api/addcategory", methods=["POST"])
@@ -176,7 +277,8 @@ def add_category():
 def add_requests():
     referring_url = request.referrer
     category_name = request.form["category_name"]
-    existing_request = Requests.query.filter_by(category_name=category_name).first()
+    existing_request = Requests.query.filter_by(
+        category_name=category_name).first()
     if existing_request:
         flash("Request already exists!", "danger")
     else:
@@ -184,7 +286,7 @@ def add_requests():
         db.session.add(new_request)
         db.session.commit()
         flash("Request submitted successfully!", "success")
-    
+
     return redirect(referring_url)
 
 

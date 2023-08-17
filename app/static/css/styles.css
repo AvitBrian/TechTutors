@@ -89,6 +89,7 @@ px;
 }
 .fadein {
   opacity: 1;
+  display: block;
   transition: opacity 1.5s;
 }
 .nav-link {

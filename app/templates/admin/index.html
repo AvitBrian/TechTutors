@@ -1,5 +1,14 @@
 {% extends 'admin/master.html' %}
 
+{%block brand%}
+<a class="d-md-block d-none" href="home"><img style="  width: 10rem; margin-bottom: -1rem;"
+        src="{{ url_for('static', filename='images/logo.png') }}" /></a>
+{%endblock%}
+
+{% block access_control %}
+{% endblock %}
+
+
 {% block body %}
-<p>Hello world</p>
+<p>Hey! it's great to have you here! 😊</p>
 {% endblock %}
