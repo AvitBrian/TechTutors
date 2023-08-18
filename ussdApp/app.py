@@ -25,7 +25,7 @@ def ussd_handler():
     session_id = request.form['sessionId']
     user_input = request.form['text']
 
-    if user_input == '*1188*':
+    if user_input == '*1188#':
         # List categories
         response = 'CON Select a category:\n'
         categories = get_categories()
@@ -65,7 +65,7 @@ def save_new_category_request(category):
         cursor.execute(query)
         db.commit()
         cursor.close()
-        return 'END Category request added successfully!\n'
+        return 'CON Category request added successfully!'
     except Exception as e:
         return f'END Error adding category request: {str(e)}\n'
 
@@ -78,11 +78,19 @@ def handle_user_input(user_input):
             return get_random_content(selected_category)
         elif selection == len(categories) + 1:
             return 'CON Enter the name of the category you would like to request:\n'
-    elif user_input.startswith('6*'):
-        new_category = user_input[2:]
-        return save_new_category_request(new_category)
+    else:
+        # Save user's input as a new category and show result
+        save_result = save_new_category_request(user_input)
+        response = f'{save_result}\n'
+        response += 'CON Select a category:\n'
+        categories = get_categories()
+        for idx, category in enumerate(categories, start=1):
+            response += f'{idx}. {category}\n'
+        response += f'{len(categories) + 1}. Request a new category\n'
+        return response
     
     return 'END Invalid input. Please try again.\n'
+
 
 if __name__ == '__main__':
     app.run(debug=True)
